@@ -13,7 +13,7 @@ class MainWindow:
         set_global_styles(self.root)
 
         # Create the main layout frames
-        self.left_frame = tk.Frame(self.root, width=200, bg='lightgray')
+        self.left_frame = tk.Frame(self.root, width=200)
         self.left_frame.pack(side=tk.LEFT, fill=tk.Y)
 
         self.right_frame = tk.Frame(self.root)
