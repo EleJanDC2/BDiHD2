@@ -1,9 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 
+from styles.theme import PRIMARY_COLOR
+
 class VerticalMenu(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
-        super().__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs, background=PRIMARY_COLOR)
         self.create_widgets()
 
     def create_widgets(self):
