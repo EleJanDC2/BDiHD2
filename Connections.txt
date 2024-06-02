@@ -1,0 +1,36 @@
+// const now = new Date();
+    //
+    // const year = now.getFullYear();
+    // const month = now.getMonth() + 1;
+    // const day = now.getDate();
+    // const hour = 23;
+    // const minute = 59;
+    // const Connections = [];
+    //
+    //
+    // for (let i = 0; i < airports_data.length; i++) {
+    //     for (let j = i + 1; j < airports_data.length; j++) {
+    //         const departureAirport = airports_data[i].fs;
+    //         const arrivalAirport = airports_data[j].fs;
+    //
+    //         const connectionData = await getConnections(departureAirport, arrivalAirport, year, month, day, hour, minute);
+    //         Connections.push({
+    //             departureAirport,
+    //             arrivalAirport,
+    //             connectionData
+    //         });
+    //
+    //         console.log(`Connections from ${departureAirport} to ${arrivalAirport} got`);
+    //     }
+    // }
+    //
+    // console.log(Connections);
+
+    async function getConnections(departureAirport, arrivalAirport, year, month, day, hour, minute) {
+        try {
+            const response = await axios.get(`https://api.flightstats.com/flex/connections/rest/v3/json/firstflightin/${departureAirport}/to/${arrivalAirport}/arriving_before/${year}/${month}/${day}/${hour}/${minute}`, headers);
+            return response.data;
+        } catch (error) {
+            console.error('Error making GET request:', error.response ? error.response.data : error.message);
+        }
+    }
