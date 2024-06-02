@@ -1,7 +1,9 @@
+from styles.theme import PRIMARY_COLOR, set_global_styles
+
 import tkinter as tk
 from tkinter import ttk
+from tkcalendar import DateEntry
 
-from styles.theme import PRIMARY_COLOR, set_global_styles
 
 
 class VerticalMenu(tk.Frame):
@@ -36,6 +38,64 @@ class VerticalMenu(tk.Frame):
         # Create a Separator
         self.separator = ttk.Separator(self, orient='horizontal')
         self.separator.pack(fill=tk.X, pady=7.5)
+
+        # Create a Label for the file actions
+        self.file_label = ttk.Label(self, text="Arguments:")
+        self.file_label.pack(fill=tk.X, pady=7.5)
+
+        # Create a frame to group the widgets
+        frame = ttk.Frame(self)
+
+        # Create a label and date picker for start date
+        start_date_label = ttk.Label(frame, text="Start Date:")
+        start_date_label.grid(row=0, column=0, sticky=tk.E, padx=5, pady=7.5)
+        self.start_date = DateEntry(frame)
+        self.start_date.grid(row=0, column=1, sticky=tk.W, padx=5, pady=7.5)
+
+        # Create a label and date picker for departure date
+        departure_date_label = ttk.Label(frame, text="Departure Date:")
+        departure_date_label.grid(row=1, column=0, sticky=tk.E, padx=5, pady=7.5)
+        self.departure_date = DateEntry(frame)
+        self.departure_date.grid(row=1, column=1, sticky=tk.W, padx=5, pady=7.5)
+
+        # Create a label and input for data count
+        data_count_label = ttk.Label(frame, text="Data Count:")
+        data_count_label.grid(row=2, column=0, sticky=tk.E, padx=5, pady=7.5)
+        self.data_count = ttk.Entry(frame)
+        self.data_count.grid(row=2, column=1, sticky=tk.W, padx=5, pady=7.5)
+
+        # Add the frame to the parent widget
+        frame.pack()
+
+        # Create a Button to start search
+        self.start_search_button = ttk.Button(self, text="Search", command=self.new_file)
+        self.start_search_button.pack(fill=tk.X, pady=7.5)
+
+        # Create a Separator
+        self.separator = ttk.Separator(self, orient='horizontal')
+        self.separator.pack(fill=tk.X, pady=7.5)
+
+        # Create a Button to export data
+        self.export_data_button = ttk.Button(self, text="Export", command=self.open_file)
+        self.export_data_button.pack(fill=tk.X, pady=7.5)
+
+         # Create a frame to group the widgets
+        frame = ttk.Frame(self)
+
+        # Create a label and input for appId
+        self.app_id_label = ttk.Label(frame, text="App ID:")
+        self.app_id_label.grid(row=0, column=0, sticky=tk.E, padx=5, pady=7.5)
+        self.app_id = ttk.Entry(frame)
+        self.app_id.grid(row=0, column=1, sticky=tk.W, padx=5, pady=7.5)
+
+        # Create a label and input for appKey
+        self.app_key_label = ttk.Label(frame, text="App Key:")
+        self.app_key_label.grid(row=1, column=0, sticky=tk.E, padx=5, pady=7.5)
+        self.app_key = ttk.Entry(frame)
+        self.app_key.grid(row=1, column=1, sticky=tk.W, padx=5, pady=7.5)
+
+        # Add the frame to the parent widget
+        frame.pack()
 
     def search_list(self, event=None):
         # Clear the Listbox
