@@ -4,6 +4,7 @@ import axios from "axios";
 import {headers} from './headers.js';
 import {getArrivals , getAirportArrival} from "./arrival.js";
 import {getDepartures , getAirportDeparture} from "./departure.js";
+import {getFilteredAirports, getFilteredByCountryAirports} from "./filterAirports.js";
 import ejs from 'ejs'
 
 const app = express();
@@ -13,25 +14,6 @@ const app = express();
 app.set('view engine', 'html');
 app.engine('html', ejs.renderFile)
 
-
-async function getFilteredAirports() {
-    try {
-        const response = await axios.get('https://api.flightstats.com/flex/airports/rest/v1/json/active', headers);
-        const airports = response.data.airports;
-
-        const filteredAirports = airports.filter(airport => airport.classification === 1);
-
-        return filteredAirports.map(airport => ({
-            name: airport.name,
-            fs: airport.fs,
-            countryName: airport.countryName,
-            timeZoneRegionName: airport.timeZoneRegionName,
-            localTime: airport.localTime
-        }));
-    } catch (error) {
-        console.error('Error making GET request:', error.response ? error.response.data : error.message);
-    }
-}
 
 
 async function getAirportDelays(codes) {
@@ -82,6 +64,9 @@ async function getAirlines() {
 async function main() {
     const airports_data = await getFilteredAirports();
     const airportCodes = airports_data.map(airport => airport.fs).join(',');
+    const airports_GB = await getFilteredByCountryAirports("GB");
+
+    console.log(airports_GB);
 
 
     const airlines = await getAirlines();
