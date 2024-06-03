@@ -10,8 +10,6 @@ async function getFilteredAirports() {
 
         const filteredAirports = airports.filter(airport => airport.classification === 1);
 
-
-
         return filteredAirports.map(airport => ({
             name: airport.name,
             fs: airport.fs,

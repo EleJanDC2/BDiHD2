@@ -78,7 +78,7 @@ async function main() {
 
     const year = 2024
     const month = 6
-    const day = 3
+    const day = 2
     const hour = 16
 
     const arrivals = await  getArrivals(airports_data , year , month , day , hour);
