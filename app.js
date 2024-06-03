@@ -1,24 +1,18 @@
-const express = require('express');
-const config = require('./config').port;
-const axios = require('axios');
+import express from 'express';
+import serverPort from "./config.js";
+import axios from "axios";
+import {headers} from './headers.js';
+import {getArrivals , getAirportArrival} from "./arrival.js";
+import {getDepartures , getAirportDeparture} from "./departure.js";
+import ejs from 'ejs'
 
 const app = express();
 
 
-const appID = 'b2c60344';
-const appKEY = '791a3fd9091491e167de077578128ec1';
 
 app.set('view engine', 'html');
-app.engine('html', require('ejs').renderFile)
+app.engine('html', ejs.renderFile)
 
-const headers = {
-
-    headers: {
-        appId: appID,
-        appKey: appKEY
-    }
-
-}
 
 async function getFilteredAirports() {
     try {
@@ -67,6 +61,7 @@ async function getSchedules(airport_list) {
 
 
 
+
 async function getAirlines() {
     try {
         const response = await axios.get(`https://api.flightstats.com/flex/airlines/rest/v1/json/active`, headers);
@@ -94,7 +89,20 @@ async function main() {
     //console.log(airlines);
     const schedules = await getSchedules(airports_data);
 
-    console.log(schedules);
+    //console.log(schedules);
+
+    const year = 2024
+    const month = 6
+    const day = 3
+    const hour = 16
+
+    const arrivals = await  getArrivals(airports_data , year , month , day , hour);
+    const arrival = await getAirportArrival(airports_data[0].fs , year , month , day , hour);
+    console.log(arrival);
+
+    const departures = await  getDepartures(airports_data , year , month , day , hour);
+    const departure = await getAirportDeparture(airports_data[0].fs , year , month , day , hour);
+    console.log(departure);
 
 
 }
