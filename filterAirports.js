@@ -4,7 +4,6 @@ import axios from "axios";
 
 async function getFilteredAirports() {
     try {
-
         const response = await axios.get('https://api.flightstats.com/flex/airports/rest/v1/json/active', headers);
         const airports = response.data.airports;
 

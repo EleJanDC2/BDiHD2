@@ -68,7 +68,6 @@ async function main() {
 
     console.log(airports_GB);
 
-
     const airlines = await getAirlines();
     const delay_data = await getAirportDelays(airportCodes);
     //console.log(airlines);
