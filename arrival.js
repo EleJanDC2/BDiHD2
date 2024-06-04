@@ -10,9 +10,8 @@ async function getAirportArrival(code , year , month , day , hourOfDay) {
     }
 }
 
-async function getArrivals(airport_list , year , month , day , hourOfDay) {
-    const arrivalPromises = airport_list.map(airport => getAirportArrival(airport.fs , year , month , day , hourOfDay));
-    return await Promise.all(arrivalPromises);
-}
 
-export {getArrivals , getAirportArrival};
+
+
+
+export {getAirportArrival};
