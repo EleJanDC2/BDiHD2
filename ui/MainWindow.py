@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from ui.components.menu import VerticalMenu
 from styles.theme import set_global_styles
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class MainWindow:
     def __init__(self):
@@ -31,6 +33,21 @@ class MainWindow:
 
         button = ttk.Button(self.right_frame, text="Click Me", command=self.on_button_click)
         button.pack(pady=10)
+
+        # Create a new figure and a subplot
+        fig, ax = plt.subplots()
+
+        # Create some example data
+        x = [1, 2, 3, 4, 5]
+        y = [1, 4, 9, 16, 25]
+
+        # Plot the data
+        ax.plot(x, y)
+
+        # Create a canvas and add it to the frame
+        canvas = FigureCanvasTkAgg(fig, master=self.right_frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
 
     def on_button_click(self):
         print("Button clicked!")
