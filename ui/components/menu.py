@@ -71,29 +71,6 @@ class VerticalMenu(tk.Frame):
         self.start_search_button = ttk.Button(self, text="Search", command=self.new_file)
         self.start_search_button.pack(fill=tk.X, pady=7.5)
 
-        # Create a Separator
-        self.separator = ttk.Separator(self, orient='horizontal')
-        self.separator.pack(fill=tk.X, pady=7.5)
-
-        # Create a Button to export data
-        self.export_data_button = ttk.Button(self, text="Export", command=self.open_file)
-        self.export_data_button.pack(fill=tk.X, pady=7.5)
-
-         # Create a frame to group the widgets
-        frame = ttk.Frame(self)
-
-        # Create a label and input for appId
-        self.app_id_label = ttk.Label(frame, text="App ID:")
-        self.app_id_label.grid(row=0, column=0, sticky=tk.E, padx=5, pady=7.5)
-        self.app_id = ttk.Entry(frame)
-        self.app_id.grid(row=0, column=1, sticky=tk.W, padx=5, pady=7.5)
-
-        # Create a label and input for appKey
-        self.app_key_label = ttk.Label(frame, text="App Key:")
-        self.app_key_label.grid(row=1, column=0, sticky=tk.E, padx=5, pady=7.5)
-        self.app_key = ttk.Entry(frame)
-        self.app_key.grid(row=1, column=1, sticky=tk.W, padx=5, pady=7.5)
-
         # Add the frame to the parent widget
         frame.pack()
 
