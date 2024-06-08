@@ -64,6 +64,24 @@ class MainWindow(Singleton):
     def on_button_click(self):
         print("Button clicked!")
 
+    def update_chart(self, airport):
+        # Fetch data related to the selected airport
+        # This is a placeholder, replace it with your actual data fetching logic
+        data = self.fetch_data_for_airport(airport)
+
+        # Clear the existing plot
+        self.ax.clear()
+
+        # Plot the new data
+        self.ax.plot(data)
+
+        # Redraw the canvas
+        self.canvas.draw()
+
+    def fetch_data_for_airport(self, airport):
+        # Placeholder for fetching data
+        return [1, 2, 3, 4, 5]
+
     def on_close(self):
         # Close the PostgreSQL connection here
         if self.conn is not None:

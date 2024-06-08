@@ -44,10 +44,6 @@ class VerticalMenu(tk.Frame):
 
         self.search_results.pack(fill=tk.BOTH, expand=True, pady=7.5)
 
-        # Create a Separator
-        self.separator = ttk.Separator(self, orient='horizontal')
-        self.separator.pack(fill=tk.X, pady=7.5)
-
         # Create a Label for the file actions
         self.file_label = ttk.Label(self, text="Arguments:")
         self.file_label.pack(fill=tk.X, pady=7.5)
@@ -77,7 +73,7 @@ class VerticalMenu(tk.Frame):
         frame.pack()
 
         # Create a Button to start search
-        self.start_search_button = ttk.Button(self, text="Search", command=self.new_file)
+        self.start_search_button = ttk.Button(self, text="Search", command=self.search_info)
         self.start_search_button.pack(fill=tk.X, pady=7.5)
 
         # Add the frame to the parent widget
@@ -101,6 +97,30 @@ class VerticalMenu(tk.Frame):
         query = "SELECT * FROM flight_stats LIMIT 1000 OFFSET 20"
         results = self.execute_query(query)
         print(results)
+
+    def search_info(self):
+        # Get the search term
+        selected_index = self.search_results.curselection()
+
+        # If an item is selected, get the item and use it as the search term
+        if selected_index:
+            search_term = self.search_results.get(selected_index)
+            self.search_term.set(search_term)
+
+        # Get the start date
+        start_date = self.start_date.get()
+
+        # Get the departure date
+        departure_date = self.departure_date.get()
+
+        # Get the data count
+        data_count = self.data_count.get()
+
+        # Print the search information
+        print(f"Search Term: {search_term}")  # Changed from selected_index to search_term
+        print(f"Start Date: {start_date}")
+        print(f"Departure Date: {departure_date}")
+        print(f"Data Count: {data_count}")
 
     def execute_query(self, query, args=None):
         try:
