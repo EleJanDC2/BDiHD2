@@ -9,8 +9,9 @@ from connection.config import load_config
 
 
 class VerticalMenu(tk.Frame):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, search_info_callback=None, *args, **kwargs):
         super().__init__(parent, *args, **kwargs, background=PRIMARY_COLOR)
+        self.search_info_callback = search_info_callback
         self.create_widgets()
         set_global_styles(parent)
 
@@ -76,6 +77,10 @@ class VerticalMenu(tk.Frame):
         self.start_search_button = ttk.Button(self, text="Search", command=self.search_info)
         self.start_search_button.pack(fill=tk.X, pady=7.5)
 
+        # Create a Button to start search
+        self.start_search_button = ttk.Button(self, text="test", command=self.new_file)
+        self.start_search_button.pack(fill=tk.X, pady=7.5)
+
         # Add the frame to the parent widget
         frame.pack()
 
@@ -96,7 +101,11 @@ class VerticalMenu(tk.Frame):
     def new_file(self):
         query = "SELECT * FROM flight_stats LIMIT 1000 OFFSET 20"
         results = self.execute_query(query)
+        print(" ")
+        print(" ")
         print(results)
+        print(" ")
+        print(" ")
 
     def search_info(self):
         # Get the search term
@@ -116,11 +125,9 @@ class VerticalMenu(tk.Frame):
         # Get the data count
         data_count = self.data_count.get()
 
-        # Print the search information
-        print(f"Search Term: {search_term}")  # Changed from selected_index to search_term
-        print(f"Start Date: {start_date}")
-        print(f"Departure Date: {departure_date}")
-        print(f"Data Count: {data_count}")
+        # Call the callback function with the search information
+        if self.search_info_callback:
+            self.search_info_callback(search_term, start_date, departure_date, data_count)
 
     def execute_query(self, query, args=None):
         try:

@@ -30,8 +30,9 @@ class MainWindow(Singleton):
         self.right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
         # Initialize the vertical menu
-        self.menu = VerticalMenu(self.left_frame)
+        self.menu = VerticalMenu(self.left_frame, search_info_callback=self.print_search_info)
         self.menu.pack(fill=tk.Y, expand=True)
+        
 
         self.conn = None
         cur = None
@@ -79,8 +80,18 @@ class MainWindow(Singleton):
         self.canvas.draw()
 
     def fetch_data_for_airport(self, airport):
-        # Placeholder for fetching data
-        return [1, 2, 3, 4, 5]
+        menu = VerticalMenu(self.root)  # or use self.left_frame
+        query = f'SELECT AVG("delay_time [minutes]") as average_delay FROM flight_stats WHERE internal_airport_id = \'{airport}\''
+        results = menu.execute_query(query)
+        return results
+
+    def print_search_info(self, search_term, start_date, departure_date, data_count):
+        print(f"Search Term: {search_term}")
+        print(f"Start Date: {start_date}")
+        print(f"Departure Date: {departure_date}")
+        print(f"Data Count: {data_count}")
+        data = self.fetch_data_for_airport(search_term)
+        print(data)
 
     def on_close(self):
         # Close the PostgreSQL connection here
