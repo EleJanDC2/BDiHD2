@@ -3,6 +3,8 @@ from styles.theme import PRIMARY_COLOR, set_global_styles
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry
+import psycopg2
+from connection.config import load_config
 
 
 
@@ -18,8 +20,10 @@ class VerticalMenu(tk.Frame):
 
 
     def create_widgets(self):
-        # Create a list to search from
-        self.list_to_search = ['item1', 'item2', 'item3', 'item4', 'item5']
+        query = "SELECT DISTINCT internal_airport_id FROM flight_stats LIMIT 1000"
+        results = self.execute_query(query)
+        # Extract the airport codes from the results and assign them to list_to_search
+        self.list_to_search = [result[0] for result in results]
 
         # Create a StringVar to hold the search term
         self.search_term = tk.StringVar()
@@ -33,6 +37,11 @@ class VerticalMenu(tk.Frame):
 
         # Create a Listbox to display the search results
         self.search_results = tk.Listbox(self)
+
+        # Insert the elements into the Listbox
+        for element in self.list_to_search:
+            self.search_results.insert(tk.END, element)
+
         self.search_results.pack(fill=tk.BOTH, expand=True, pady=7.5)
 
         # Create a Separator
@@ -89,10 +98,37 @@ class VerticalMenu(tk.Frame):
             self.search_results.insert(tk.END, result)
 
     def new_file(self):
-        print("New file action")
+        query = "SELECT * FROM flight_stats LIMIT 1000 OFFSET 20"
+        results = self.execute_query(query)
+        print(results)
 
-    def open_file(self):
-        print("Open file action")
+    def execute_query(self, query, args=None):
+        try:
+            # Load the configuration
+            config = load_config()
+
+            # Connect to the PostgreSQL server
+            conn = psycopg2.connect(**config)
+
+            # create a cursor
+            cur = conn.cursor()
+            
+            # execute the query
+            cur.execute(query, args)
+            
+            # fetch all the results
+            results = cur.fetchall()
+            
+            # return the results
+            return results
+        except (psycopg2.DatabaseError, Exception) as error:
+            print(error)
+        finally:
+            if cur is not None:
+                cur.close()
+            if conn is not None:
+                conn.close()
+                print('Database connection closed.')
 
     def quit_app(self):
         self.quit()

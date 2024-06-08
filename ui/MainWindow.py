@@ -4,10 +4,16 @@ from ui.components.menu import VerticalMenu
 from styles.theme import set_global_styles
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import psycopg2
-from connection.config import load_config
 
-class MainWindow:
+class Singleton:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Singleton, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
+
+class MainWindow(Singleton):
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Simple UI")
@@ -55,39 +61,8 @@ class MainWindow:
     def run(self):
         self.root.mainloop()
 
-    def execute_query(self, query, args=None):
-
-        try:
-            # Load the configuration
-            config = load_config()
-
-            # Connect to the PostgreSQL server
-            conn = psycopg2.connect(**config)
-
-            # create a cursor
-            cur = conn.cursor()
-            
-            # execute the query
-            cur.execute(query, args)
-            
-            # fetch all the results
-            results = cur.fetchall()
-            
-            # return the results
-            return results
-        except (psycopg2.DatabaseError, Exception) as error:
-            print(error)
-        finally:
-            if cur is not None:
-                cur.close()
-            if conn is not None:
-                conn.close()
-                print('Database connection closed.')
-
     def on_button_click(self):
-        query = "SELECT * FROM flight_stats LIMIT 1000 OFFSET 20"
-        results = self.execute_query(query)
-        print(results)
+        print("Button clicked!")
 
     def on_close(self):
         # Close the PostgreSQL connection here
