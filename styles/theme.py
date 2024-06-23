@@ -25,7 +25,7 @@ def set_global_styles(root):
     
     style.configure('TFrame', background=PRIMARY_COLOR)
 
-    style.configure('TLabel', background=PRIMARY_COLOR, foreground=TEXT_COLOR)
+    style.configure('TLabel', background=SECONDARY_COLOR, foreground=TEXT_COLOR)
 
     style.configure('TEntry', fieldbackground=SECONDARY_COLOR, foreground=TEXT_COLOR, font=('Arial', FONT_SIZE))
 

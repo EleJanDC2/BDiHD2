@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 from ui.components.menu import VerticalMenu
 from styles.theme import set_global_styles
+import matplotlib
+matplotlib.use('TkAgg')  # Set the backend to TkAgg
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -14,7 +16,8 @@ class Singleton:
         return cls._instance
 
 class MainWindow(Singleton):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.root = tk.Tk()
         self.root.title("Simple UI")
         self.root.geometry("800x600")
@@ -29,55 +32,51 @@ class MainWindow(Singleton):
         self.right_frame = tk.Frame(self.root)
         self.right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-        # Initialize the vertical menu
-        self.menu = VerticalMenu(self.left_frame, search_info_callback=self.print_search_info)
+        # Initialize the vertical menu with both callbacks
+        self.menu = VerticalMenu(self.left_frame, search_info_callback=self.print_search_info, update_chart_callback=self.update_chart)
         self.menu.pack(fill=tk.Y, expand=True)
         
-
         self.conn = None
         cur = None
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
+        self.plot_lines = None
         self.create_widgets()
 
     def create_widgets(self):
-        button = ttk.Button(self.right_frame, text="Click Me", command=self.on_button_click)
-        button.pack(pady=10)
 
-        # Create a new figure and a subplot
-        fig, ax = plt.subplots()
+        # Create a figure and axis for the chart
+        self.fig, self.ax = plt.subplots()
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.right_frame)
+        self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
-        # Create some example data
-        x = [1, 2, 3, 4, 5]
-        y = [1, 4, 9, 16, 25]
+    def update_chart(self, data, x_label, y_label, title):
+        if data is None:
+            # Handle the case where data is None, perhaps log a warning or silently return
+            return
 
-        # Plot the data
-        ax.plot(x, y)
+        # Assuming data is a tuple or list of (x, y) values
+        x_data, y_data = zip(*data)
 
-        # Create a canvas and add it to the frame
-        canvas = FigureCanvasTkAgg(fig, master=self.right_frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack()
+        # Clear the previous plot
+        self.ax.clear()
+
+        # Create a bar chart
+        self.ax.bar(x_data, y_data)
+
+        # Optionally, you can set labels and title again if they get cleared with ax.clear()
+        self.ax.set_xlabel(x_label)
+        self.ax.set_ylabel(y_label)
+        self.ax.set_title(title)
+        # Redraw the canvas
+        self.canvas.draw()
+
 
     def run(self):
         self.root.mainloop()
 
     def on_button_click(self):
         print("Button clicked!")
-
-    def update_chart(self, airport):
-        # Fetch data related to the selected airport
-        # This is a placeholder, replace it with your actual data fetching logic
-        data = self.fetch_data_for_airport(airport)
-
-        # Clear the existing plot
-        self.ax.clear()
-
-        # Plot the new data
-        self.ax.plot(data)
-
-        # Redraw the canvas
-        self.canvas.draw()
 
     def fetch_data_for_airport(self, airport):
         menu = VerticalMenu(self.root)  # or use self.left_frame
